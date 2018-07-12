@@ -23,8 +23,8 @@
 //#include <zlib.h>
 #endif
 #endif // __cplusplus
-#include <pil_io.h>
-#include <pil.h>
+#include "pil_io.h"
+#include "pil.h"
 
 /****************************************************************************
  *                                                                          *

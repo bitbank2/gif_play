@@ -1,8 +1,8 @@
 CFLAGS=-c -Wall -O3
 # For Raspberry Pi, it's recommended to use PIGPIO for fast SPI I/O
-LIBS = -lspi_lcd -lpigpio -pthread
+#LIBS = -lspi_lcd -lpigpio -pthread
 # For other boards, use the Linux SPI driver
-#LIBS = -lspi_lcd 
+LIBS = -lspi_lcd -pthread 
 
 all: gp
 
