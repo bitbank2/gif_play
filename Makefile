@@ -1,8 +1,13 @@
 CFLAGS=-c -Wall -O3
+# By default on linux, `gp` will default to using the framebuffer.
 # For Raspberry Pi, it's recommended to use PIGPIO for fast SPI I/O
-#LIBS = -lspi_lcd -lpigpio -pthread
-# For other boards, use the Linux SPI driver
-LIBS = -lspi_lcd -pthread 
+#LIBS = -lpigpio -pthread
+# For other boards, `gp` will use the Linux SPI driver if SPI_LCD is in CFLAGS:
+# `make CLFAGS=-DSPI_LCD all`
+LIBS = -lpthread
+ifneq (,$(findstring SPI_LCD,$(CFLAGS)))
+	LIBS += -lspi_lcd
+endif
 
 .PHONY: all
 all: gp
@@ -28,4 +33,3 @@ pil_lzw.o: pil_lzw.c
 .PHONY: clean
 clean:
 	rm -f *.o gp
-

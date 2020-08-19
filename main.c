@@ -31,7 +31,9 @@
 #include "pil.h"
 #include "pil_io.h"
 
+#ifdef SPI_LCD
 #include <spi_lcd.h>
+#endif
 
 #define MAX_PATH 260
 static char szIn[MAX_PATH];
@@ -91,10 +93,14 @@ unsigned char *s, *d;
 	{
 		if (bLCD)
 		{
+#ifdef SPI_LCD
 		if (w > 320) w = 320;
 		if (h > 240) h = 240;
 		cx = (320 - w)/2;
 		cy = (240 - h)/2;
+#else
+		printf("Error: SPI_LCD support is not compiled in");
+#endif
 		}
 		else
 		{
@@ -108,6 +114,7 @@ unsigned char *s, *d;
 	}
 	if (bLCD)
 	{
+#ifdef SPI_LCD
 	for (y=0; y<h; y+=16)
 	{
 		ty = 16;
@@ -122,6 +129,9 @@ unsigned char *s, *d;
 			spilcdDrawTile(x+cx,y+cy, tx, ty, s, pPage->iPitch);
 		}
 	} // for y
+#else
+	printf("Error: SPI_LCD support is not compiled in");
+#endif
 	}
 	else
 	{
@@ -225,6 +235,7 @@ void *pFile;
 		PILCountGIFPages(&pf);
    if (bLCD)
    {
+#ifdef SPI_LCD
 // LCD type, flip 180, SPI channel, D/C, RST, LCD
    rc = spilcdInit(LCD_ILI9342, 0, 0, 32000000, 13, 11, 18);
    if (rc != 0)
@@ -234,6 +245,9 @@ void *pFile;
 	   return -1;
    }
 //   spilcdSetOrientation(LCD_ORIENTATION_ROTATED);
+#else
+	printf("Error: SPI_LCD support is not compiled in");
+#endif
    }
    else
    {
@@ -288,7 +302,11 @@ printf("smem_len=%08x, line_length=%08x, mem can hold %d lines\n", finfo.smem_le
 		pp2.iWidth = pf.iX;
 		pp2.iHeight = pf.iY;
 		if (bLCD)
+#ifdef SPI_LCD
 			pp2.cBitsperpixel = 16;
+#else
+			printf("Error: SPI_LCD support is not compiled in");
+#endif
 		else
 			pp2.cBitsperpixel = vinfo.bits_per_pixel; // has to be same as display
 		pp2.iPitch = (pp2.iWidth * pp2.cBitsperpixel)/8;
