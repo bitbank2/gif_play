@@ -9,6 +9,8 @@ ifneq (,$(findstring SPI_LCD,$(CFLAGS)))
 	LIBS += -lspi_lcd
 endif
 
+PREFIX ?= /usr/local
+
 .PHONY: all
 all: gp
 
@@ -29,6 +31,10 @@ pil_io.o: pil_io.c
 
 pil_lzw.o: pil_lzw.c
 	$(CC) $(CFLAGS) pil_lzw.c
+
+.PHONY: install
+install: gp
+	install -D -m 0755 $(@D)/gp $(DESTDIR)$(PREFIX)/bin/gp
 
 .PHONY: clean
 clean:
